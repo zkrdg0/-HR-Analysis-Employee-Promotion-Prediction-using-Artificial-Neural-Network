@@ -16,7 +16,6 @@ categorical_columns = ['department', 'region', 'education', 'gender', 'recruitme
 for col in categorical_columns:
     df[col] = label_encoder.fit_transform(df[col])
 
-#  Eksik değerleri kontrol etme ve doldurma
 for col in df.columns:
     if df[col].dtype == 'object' or len(df[col].unique()) < 20:
         df[col].fillna(df[col].mode()[0], inplace=True)  # Kategorik veriler için mod
@@ -35,7 +34,6 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-#  Yapay sinir ağı modelini kurma
 model = Sequential()
 
 model.add(Dense(units=128, activation='relu', input_dim=X_train.shape[1]))
@@ -70,7 +68,6 @@ predictions_prob = model.predict(X_test)
 
 predictions = (predictions_prob > 0.5).astype(int)
 
-# ROC Eğrisi
 fpr, tpr, _ = roc_curve(y_test, predictions_prob)  
 roc_auc = auc(fpr, tpr)
 
@@ -84,7 +81,6 @@ plt.legend(loc='lower right')
 plt.grid(True)
 plt.show()
 
-# Kayıp (loss) grafiği
 plt.subplot(1, 2, 2)
 plt.plot(history.history['loss'], label='Eğitim Kaybı')
 plt.plot(history.history['val_loss'], label='Test Kaybı')
